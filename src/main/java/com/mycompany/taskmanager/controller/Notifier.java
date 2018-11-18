@@ -13,8 +13,12 @@ import java.util.TimerTask;
  *
  * @author St1gven
  */
-public final class Notifier {
-	LinkedList<Notification> notifications = new LinkedList<>();
+public final class Notifier 
+{
+	private LinkedList<Notification> notifications = new LinkedList<>();
+	private Timer timer;
+	private final static int REPEAT_PERIOD = 5;
+	
 	public Notifier(){};
 	
 	public Notifier(Collection<Task> tasks)
@@ -83,7 +87,7 @@ public final class Notifier {
 	}
 	void start()
 	{
-		Timer timer = new Timer(true);
+		timer = new Timer(true);
 		TimerTask action;
 		action = new TimerTask()
 		{
@@ -97,6 +101,11 @@ public final class Notifier {
 				}
 			}
 		};
-		timer.scheduleAtFixedRate(action, 0, 5);
+		timer.scheduleAtFixedRate(action, 0, REPEAT_PERIOD);
+	}
+	@Override
+	public void finalize()
+	{
+		timer.cancel();
 	}
 }
