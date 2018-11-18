@@ -2,6 +2,8 @@ package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.model.Task;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Timer;
@@ -11,8 +13,19 @@ import java.util.TimerTask;
  *
  * @author St1gven
  */
-public class Notifier {
-	LinkedList<Notification> notifications;
+public final class Notifier {
+	LinkedList<Notification> notifications = new LinkedList<>();
+	public Notifier(){};
+	
+	public Notifier(Collection<Task> tasks)
+	{
+		for(Task task:tasks)
+		{
+			notifications.add(buildNotification(task));
+		}
+		Collections.sort(notifications, (Notification t1, Notification t2) -> t1.getTask().getTime().compareTo(t2.getTask().getTime()));
+	}
+	
 	public void addNotification(Task task)
 	{
 		for (ListIterator<Notification> it = notifications.listIterator(); it.hasNext();) 
@@ -29,19 +42,21 @@ public class Notifier {
 			
 			if(cmp > 0)
 			{
-				Notification newNotification = null;
-				switch(task.getType())
-				{
-					case WINDOW:
-						newNotification = new WindowNotification(task);
-						break;
-					case NONE:
-						newNotification = new NoneNotification(task);
-						break;
-				}
-				notifications.add(index + 1, newNotification);
+				
+				notifications.add(index + 1, buildNotification(task));
 				return;
 			}
+		}
+	}
+	Notification buildNotification(Task task)
+	{
+		switch(task.getType())
+		{
+			case WINDOW:
+				return new WindowNotification(task);
+			case NONE:
+			default:
+				return new NoneNotification(task);
 		}
 	}
 	public void removeNotification(int taskId)
