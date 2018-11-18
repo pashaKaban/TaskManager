@@ -15,11 +15,14 @@ import java.util.TimerTask;
  */
 public final class Notifier 
 {
-	private LinkedList<Notification> notifications = new LinkedList<>();
+	private final LinkedList<Notification> notifications = new LinkedList<>();
 	private Timer timer;
 	private final static int REPEAT_PERIOD = 5;
 	
-	public Notifier(){};
+	public Notifier()
+	{
+		start();
+	}
 	
 	public Notifier(Collection<Task> tasks)
 	{
@@ -28,6 +31,7 @@ public final class Notifier
 			notifications.add(buildNotification(task));
 		}
 		Collections.sort(notifications, (Notification t1, Notification t2) -> t1.getTask().getTime().compareTo(t2.getTask().getTime()));
+		start();
 	}
 	
 	public void addNotification(Task task)
@@ -80,7 +84,7 @@ public final class Notifier
 	void action()
 	{
 		Notification first = notifications.getFirst();
-		if(notifications.getFirst().getTask().getTime().compareTo(LocalDateTime.now()) > 0)
+		if(first != null && first.getTask().getTime().compareTo(LocalDateTime.now()) > 0)
 		{
 			first.action();
 		}
