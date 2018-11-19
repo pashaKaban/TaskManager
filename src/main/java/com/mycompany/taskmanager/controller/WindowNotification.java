@@ -29,6 +29,7 @@ public class WindowNotification implements Notification{
 	@Override
 	public void action() 
 	{
+		System.out.println("WindowsNotification");
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	

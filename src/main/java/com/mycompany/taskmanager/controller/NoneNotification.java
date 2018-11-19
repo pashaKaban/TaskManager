@@ -30,6 +30,7 @@ public class NoneNotification implements Notification{
 	@Override
 	public void action() 
 	{
+		System.out.println("NoneNotification");
 		throw new UnsupportedOperationException("Not supported yet."); 
 	}
 	

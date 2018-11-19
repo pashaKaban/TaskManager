@@ -15,14 +15,12 @@ import java.util.TimerTask;
  */
 public final class Notifier 
 {
+	//TODO Singleton
 	private final LinkedList<Notification> notifications = new LinkedList<>();
 	private Timer timer;
-	private final static int REPEAT_PERIOD = 5;
+	private final static int REPEAT_PERIOD = 5000;
 	
-	public Notifier()
-	{
-		start();
-	}
+	public Notifier(){}
 	
 	public Notifier(Collection<Task> tasks)
 	{
@@ -31,7 +29,6 @@ public final class Notifier
 			notifications.add(buildNotification(task));
 		}
 		Collections.sort(notifications, (Notification t1, Notification t2) -> t1.getTask().getTime().compareTo(t2.getTask().getTime()));
-		start();
 	}
 	
 	public void addNotification(Task task)
@@ -41,23 +38,42 @@ public final class Notifier
 			int index = it.nextIndex();
 			Notification notification = it.next();
 			
-			int cmp = notification.getTask().getTime().compareTo(task.getTime());
+			if(notification.getTask().getId() == task.getId())
+				throw new IllegalArgumentException("This task also added");
 			
-			if(cmp == 0)
+			if(notification.getTask().getTime().compareTo(task.getTime()) > 0)
 			{
-				throw new IllegalArgumentException();
-			}
-			
-			if(cmp > 0)
-			{
-				
-				notifications.add(index + 1, buildNotification(task));
+				notifications.add(index, buildNotification(task));
 				return;
 			}
 		}
+		notifications.add(buildNotification(task));
 	}
+	
+	public void updateNotification(Task task)
+	{
+		for(ListIterator<Notification> it = notifications.listIterator(); it.hasNext();)
+		{
+			Notification notification = it.next();
+			if(notification.getTask().getId() == task.getId())
+			{
+				if(notification.getTask().getTime().compareTo(task.getTime()) != 0)
+				{
+					it.remove();
+				}
+				break;
+			}
+		}
+		addNotification(task);
+	}
+	
 	Notification buildNotification(Task task)
 	{
+		try
+		{
+			task = task.clone();
+		}
+		catch(CloneNotSupportedException e){}
 		switch(task.getType())
 		{
 			case WINDOW:
@@ -80,15 +96,6 @@ public final class Notifier
 			}
 		}
 	}
-	
-	void action()
-	{
-		Notification first = notifications.getFirst();
-		if(first != null && first.getTask().getTime().compareTo(LocalDateTime.now()) > 0)
-		{
-			first.action();
-		}
-	}
 	void start()
 	{
 		timer = new Timer(true);
@@ -98,17 +105,20 @@ public final class Notifier
 			@Override
 			public void run()
 			{
-				Notification first = notifications.getFirst();
-				if(notifications.getFirst().getTask().getTime().compareTo(LocalDateTime.now()) > 0)
+				if(!notifications.isEmpty())
 				{
-					first.action();
+					Notification first = notifications.getFirst();
+					if(first.getTask().getTime().compareTo(LocalDateTime.now()) <= 0)
+					{
+						first.action();
+						notifications.removeFirst();
+					}
 				}
 			}
 		};
 		timer.scheduleAtFixedRate(action, 0, REPEAT_PERIOD);
 	}
-	@Override
-	public void finalize()
+	void cancel()
 	{
 		timer.cancel();
 	}

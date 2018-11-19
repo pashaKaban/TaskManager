@@ -8,6 +8,7 @@ import com.mycompany.taskmanager.model.*;
  * @author St1gven
  */
 public class Controller {
+	//TODO Singleton
 	private Journal journal;
 	public void setJournal(Journal journal)
 	{
