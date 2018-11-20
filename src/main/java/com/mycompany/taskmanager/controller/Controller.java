@@ -7,8 +7,19 @@ import com.mycompany.taskmanager.model.*;
  *
  * @author St1gven
  */
-public class Controller {
-	//TODO Singleton
+public class Controller 
+{
+	private Controller(){}
+	
+	private static class ControllerHolder
+	{
+		private final static Controller instance = new Controller();
+	}
+	public static Controller getNotifier()
+	{
+		return ControllerHolder.instance;
+	}
+	
 	private Journal journal;
 	public void setJournal(Journal journal)
 	{

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,48 +21,56 @@ public final class Notifier
 	private Timer timer;
 	private final static int REPEAT_PERIOD = 5000;
 	
-	public Notifier(){}
+	private Notifier(){}
 	
-	public Notifier(Collection<Task> tasks)
+	private static class NotifierHolder
 	{
-		for(Task task:tasks)
-		{
-			notifications.add(buildNotification(task));
-		}
-		Collections.sort(notifications, (Notification t1, Notification t2) -> t1.getTask().getTime().compareTo(t2.getTask().getTime()));
+		private final static Notifier instance = new Notifier();
+	}
+	public static Notifier getNotifier()
+	{
+		return NotifierHolder.instance;
 	}
 	
 	public void addNotification(Task task)
 	{
-		for (ListIterator<Notification> it = notifications.listIterator(); it.hasNext();) 
+		List list = Collections.synchronizedList(notifications);
+		synchronized (list) 
 		{
-			int index = it.nextIndex();
-			Notification notification = it.next();
-			
-			if(notification.getTask().getId() == task.getId())
-				throw new IllegalArgumentException("This task also added");
-			
-			if(notification.getTask().getTime().compareTo(task.getTime()) > 0)
+			for (ListIterator<Notification> it = list.listIterator(); it.hasNext();) 
 			{
-				notifications.add(index, buildNotification(task));
-				return;
+				int index = it.nextIndex();
+				Notification notification = it.next();
+
+				if(notification.getTask().getId() == task.getId())
+					throw new IllegalArgumentException("This task also added");
+
+				if(notification.getTask().getTime().compareTo(task.getTime()) > 0)
+				{
+					list.add(index, buildNotification(task));
+					return;
+				}
 			}
+			list.add(buildNotification(task));
 		}
-		notifications.add(buildNotification(task));
 	}
 	
 	public void updateNotification(Task task)
 	{
-		for(ListIterator<Notification> it = notifications.listIterator(); it.hasNext();)
+		List list = Collections.synchronizedList(notifications);
+		synchronized (list)
 		{
-			Notification notification = it.next();
-			if(notification.getTask().getId() == task.getId())
+			for(ListIterator<Notification> it = list.listIterator(); it.hasNext();)
 			{
-				if(notification.getTask().getTime().compareTo(task.getTime()) != 0)
+				Notification notification = it.next();
+				if(notification.getTask().getId() == task.getId())
 				{
-					it.remove();
+					if(notification.getTask().getTime().compareTo(task.getTime()) != 0)
+					{
+						it.remove();
+					}
+					break;
 				}
-				break;
 			}
 		}
 		addNotification(task);
@@ -85,14 +94,18 @@ public final class Notifier
 	}
 	public void removeNotification(int taskId)
 	{
-		for(ListIterator<Notification> it = notifications.listIterator(); it.hasNext();)
-		{		
-			int index = it.nextIndex();
-			Notification notification = it.next();
-			if(notification.getTask().getId() == taskId)
-			{
-				notifications.remove(index);
-				return;
+		List list = Collections.synchronizedList(notifications);
+		synchronized (list)
+		{
+			for(ListIterator<Notification> it = notifications.listIterator(); it.hasNext();)
+			{		
+				int index = it.nextIndex();
+				Notification notification = it.next();
+				if(notification.getTask().getId() == taskId)
+				{
+					notifications.remove(index);
+					return;
+				}
 			}
 		}
 	}
