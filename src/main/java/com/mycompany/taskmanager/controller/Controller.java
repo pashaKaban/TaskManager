@@ -26,9 +26,9 @@ public class Controller
 		this.journal = journal;
 	}
 	
-	public Task createTask(String name, String description, LocalDateTime datetime, NotificationType type)
+	public void createTask(String name, String description, LocalDateTime datetime, NotificationType type)
 	{
-		return new Task(name, description, datetime, type);
+		journal.addTask(new Task(name, description, datetime, type));
 	}
 	
 	public void finishTask(int taskId)
@@ -38,18 +38,21 @@ public class Controller
 		journal.addTask(task);
 	}
 	
-	public Task postponeTask(int taskId, TemporalAmount shift)
+	public void postponeTask(int taskId, TemporalAmount shift)
 	{
 		Task task = journal.getTask(taskId, Status.ACTIVE);
 		task.setTime(task.getTime().plus(shift));
-		return task;
+		//return task;
 	}
 	
-	public Task postponeTask(int taskId, LocalDateTime datetime)
+	public void postponeTask(int taskId, LocalDateTime datetime)
 	{
 		Task task = journal.getTask(taskId, Status.ACTIVE);
 		task.setTime(datetime);
-		return task;
+		Notifier.getNotifier().updateNotification(task);
+		//return task;
+		//TODO updateTask to journal
+		//TODO redrawJournal to View
 	}
 	
 	public void cancelTask(int taskId)

@@ -47,7 +47,8 @@ public final class Notifier
 
 				if(notification.getTask().getTime().compareTo(task.getTime()) > 0)
 				{
-					list.add(index, buildNotification(task));
+					it.previous();
+					it.add(buildNotification(task));
 					return;
 				}
 			}
@@ -68,6 +69,10 @@ public final class Notifier
 					if(notification.getTask().getTime().compareTo(task.getTime()) != 0)
 					{
 						it.remove();
+					}
+					else
+					{
+						it.set(buildNotification(task));
 					}
 					break;
 				}
@@ -103,7 +108,7 @@ public final class Notifier
 				Notification notification = it.next();
 				if(notification.getTask().getId() == taskId)
 				{
-					notifications.remove(index);
+					it.remove();
 					return;
 				}
 			}
