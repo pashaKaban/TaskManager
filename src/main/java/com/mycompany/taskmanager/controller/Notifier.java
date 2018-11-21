@@ -7,4 +7,7 @@ package com.mycompany.taskmanager.controller;
 public interface Notifier {
 	void addNotification(Task);
 	void removeNotification(int taskId);
+	void updateNotification(Task task);
+	void start();
+	void cancel();
 }
