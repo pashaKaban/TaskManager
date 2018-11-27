@@ -16,13 +16,6 @@ public class Main
      */
 	public static void main(String[] args) throws InterruptedException
 	{
-		/*Notifier n = Notifier.getNotifier();
-		Task t1 = new Task("fd", "fsdf", LocalDateTime.now().minusHours(1), NotificationType.WINDOW);
-		n.addNotification(t1);
-		Task t2 = new Task("fd", "fsdf", LocalDateTime.now(), NotificationType.NONE);
-		n.addNotification(t2);
-		Thread.sleep(20000);
-		n.cancel();
-		//while(true);*/
+		
 	}
 }
