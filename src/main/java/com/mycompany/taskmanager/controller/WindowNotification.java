@@ -1,31 +1,45 @@
 package com.mycompany.taskmanager.controller;
 
-import com.mycompany.taskmanager.model.Task;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 
 /**
  *
  * @author St1gven
  */
 public class WindowNotification implements Notification{
-	private Task task;
-	
-	WindowNotification(Task task)
+	private int taskId;
+	private LocalDateTime time;
+	WindowNotification(int taskId, LocalDateTime time, TemporalAmount shift)
 	{
-		this.task = task;
+		this.taskId = taskId;
+		this.time = time.minus(shift);
 	}
 	
 	@Override
-	public Task getTask() 
+	public int getTaskId() 
 	{
-		return task;
+		return taskId;
 	}
 
 	@Override
-	public void setTask(Task task) 
+	public void setTaskId(int taskId) 
 	{
-		this.task = task;
+		this.taskId = taskId;
 	}
 
+	@Override
+	public LocalDateTime getTime()
+	{
+		return time;
+	}
+	
+	@Override
+	public void setTime(LocalDateTime time)
+	{
+		this.time = time;
+	}
+	
 	@Override
 	public void action() 
 	{
