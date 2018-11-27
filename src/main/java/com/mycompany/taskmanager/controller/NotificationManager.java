@@ -1,5 +1,7 @@
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.model.Journal;
+import com.mycompany.taskmanager.model.Status;
 import com.mycompany.taskmanager.model.Task;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -14,38 +16,46 @@ import java.util.TimerTask;
  *
  * @author St1gven
  */
-public final class Notifier 
+public final class NotificationManager 
 {
-	//TODO Singleton
 	private final LinkedList<Notification> notifications = new LinkedList<>();
 	private Timer timer;
 	private final static int REPEAT_PERIOD = 5000;
 	
-	private Notifier(){}
+	private NotificationManager(){}
 	
-	private static class NotifierHolder
+	private static class NotificationManagerHolder
 	{
-		private final static Notifier instance = new Notifier();
-	}
-	public static Notifier getNotifier()
-	{
-		return NotifierHolder.instance;
+		private final static NotificationManager instance = new NotificationManager();
 	}
 	
-	public void addNotification(Task task)
+	/**
+	 * @return экземпляр класса NotificationManager
+	 */
+	public static NotificationManager getNotifier()
 	{
+		return NotificationManagerHolder.instance;
+	}
+	
+	/**
+	 * Добавить задачу в отслеживание времени оповещений
+	 * @param taskId идентификатор задачи
+	 * @param journal журнал из которого загружается задача
+	 */
+	void addNotification(int taskId)
+	{
+		Task task = Controller.getController().getTask(taskId);
 		List list = Collections.synchronizedList(notifications);
 		synchronized (list) 
 		{
 			for (ListIterator<Notification> it = list.listIterator(); it.hasNext();) 
 			{
-				int index = it.nextIndex();
 				Notification notification = it.next();
 
-				if(notification.getTask().getId() == task.getId())
+				if(notification.getTaskId() == task.getId())
 					throw new IllegalArgumentException("This task also added");
 
-				if(notification.getTask().getTime().compareTo(task.getTime()) > 0)
+				if(notification.getTime().compareTo(task.getTime().minus(task.getNotificationShift())) > 0)
 				{
 					it.previous();
 					it.add(buildNotification(task));
@@ -56,17 +66,22 @@ public final class Notifier
 		}
 	}
 	
-	public void updateNotification(Task task)
+	/**
+	 * Обновить состояние задачи
+	 * @param taskId 
+	 */
+	void updateNotification(int taskId)
 	{
+		Task task = Controller.getController().getTask(taskId);
 		List list = Collections.synchronizedList(notifications);
 		synchronized (list)
 		{
 			for(ListIterator<Notification> it = list.listIterator(); it.hasNext();)
 			{
 				Notification notification = it.next();
-				if(notification.getTask().getId() == task.getId())
+				if(notification.getTaskId() == task.getId())
 				{
-					if(notification.getTask().getTime().compareTo(task.getTime()) != 0)
+					if(notification.getTime().compareTo(task.getTime().minus(task.getNotificationShift())) != 0)
 					{
 						it.remove();
 					}
@@ -78,35 +93,34 @@ public final class Notifier
 				}
 			}
 		}
-		addNotification(task);
+		addNotification(taskId);
 	}
 	
-	Notification buildNotification(Task task)
+	private Notification buildNotification(Task task)
 	{
-		try
-		{
-			task = task.clone();
-		}
-		catch(CloneNotSupportedException e){}
 		switch(task.getType())
 		{
 			case WINDOW:
-				return new WindowNotification(task);
+				return new WindowNotification(task.getId(), task.getTime(), task.getNotificationShift());
 			case NONE:
 			default:
-				return new NoneNotification(task);
+				return new NoneNotification(task.getId(), task.getTime(), task.getNotificationShift());
 		}
 	}
-	public void removeNotification(int taskId)
+	
+	/**
+	 * Удалить задачу из отслеживания времени оповещения
+	 * @param taskId 
+	 */
+	void removeNotification(int taskId)
 	{
 		List list = Collections.synchronizedList(notifications);
 		synchronized (list)
 		{
 			for(ListIterator<Notification> it = notifications.listIterator(); it.hasNext();)
 			{		
-				int index = it.nextIndex();
 				Notification notification = it.next();
-				if(notification.getTask().getId() == taskId)
+				if(notification.getTaskId() == taskId)
 				{
 					it.remove();
 					return;
@@ -114,6 +128,10 @@ public final class Notifier
 			}
 		}
 	}
+	
+	/**
+	 * Начать отслеживание времени оповещений
+	 */
 	void start()
 	{
 		timer = new Timer(true);
@@ -126,7 +144,7 @@ public final class Notifier
 				if(!notifications.isEmpty())
 				{
 					Notification first = notifications.getFirst();
-					if(first.getTask().getTime().compareTo(LocalDateTime.now()) <= 0)
+					if(first.getTime().compareTo(LocalDateTime.now()) <= 0)
 					{
 						first.action();
 						notifications.removeFirst();
@@ -136,6 +154,10 @@ public final class Notifier
 		};
 		timer.scheduleAtFixedRate(action, 0, REPEAT_PERIOD);
 	}
+	
+	/**
+	 * Завершить отслеживание времени оповещений
+	 */
 	void cancel()
 	{
 		timer.cancel();
