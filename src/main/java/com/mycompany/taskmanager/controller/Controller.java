@@ -15,60 +15,119 @@ public class Controller
 	{
 		private final static Controller instance = new Controller();
 	}
-	public static Controller getNotifier()
+	
+	/**
+	 * @return экземпляр Controller
+	 */
+	public static Controller getController()
 	{
 		return ControllerHolder.instance;
 	}
 	
 	private Journal journal;
-	public void setJournal(Journal journal)
+	/**
+	 * Устанавливает журнал с которым будет работать контроллер
+	 * @param journal журнал
+	 */
+	void setJournal(Journal journal)
 	{
 		this.journal = journal;
 	}
 	
-	public void createTask(String name, String description, LocalDateTime datetime, NotificationType type)
+	/**
+	 * @param taskId идентификатор задачи
+	 * @return обьект Task с соответствующим идентификатором
+	 */
+	Task getTask(int taskId)
 	{
-		journal.addTask(new Task(name, description, datetime, type));
+		return journal.getTask(taskId);
 	}
 	
-	public void finishTask(int taskId)
+	/**
+	 * Создание задачи, добавление ее в журнал
+	 * @param name название задачи
+	 * @param description описание задачи
+	 * @param datetime время и дата задачи
+	 * @param notificationShift время, за которое должно сработать оповещение
+	 * @param type тип уведомления
+	 */
+	void createTask(String name, String description, LocalDateTime datetime, 
+			TemporalAmount notificationShift, NotificationType type)
 	{
-		Task task = journal.removeTask(taskId, Status.ACTIVE);
-		task.setStatus(Status.FINISHED);
+		Task task = new Task(name, description, datetime, notificationShift, type);
 		journal.addTask(task);
+		NotificationManager.getNotifier().addNotification(task.getId());
+		//TODO redrawJournal
 	}
 	
-	public void postponeTask(int taskId, TemporalAmount shift)
+	/**
+	 * Изменить статус задачи на "завершенная"
+	 * @param taskId идентификатор задачи
+	 */
+	void finishTask(int taskId)
 	{
-		Task task = journal.getTask(taskId, Status.ACTIVE);
+		journal.finishTask(taskId);
+		NotificationManager.getNotifier().removeNotification(taskId);
+		//TODO redrawJournal
+	}
+	
+	/**
+	 * Отложить задачу на определенное время
+	 * Новое время задачи определяется путем прибавления к текущему времени количсетво времени определяемое параметром shift
+	 * @param taskId идентификатор задачи
+	 * @param shift количество времени, на которое перемещается задачу
+	 */
+	void postponeTask(int taskId, TemporalAmount shift)
+	{
+		Task task = journal.getTask(taskId);
 		task.setTime(task.getTime().plus(shift));
-		//return task;
+		NotificationManager.getNotifier().updateNotification(taskId);
+		//TODO redrawJournal
 	}
 	
-	public void postponeTask(int taskId, LocalDateTime datetime)
+	/**
+	 * Перенести задачу на определенное время
+	 * @param taskId идентификатор задачи
+	 * @param datetime время, на которое перемещается задача
+	 */
+	void postponeTask(int taskId, LocalDateTime datetime)
 	{
-		Task task = journal.getTask(taskId, Status.ACTIVE);
+		Task task = journal.getTask(taskId);
 		task.setTime(datetime);
-		Notifier.getNotifier().updateNotification(task);
-		//return task;
-		//TODO updateTask to journal
-		//TODO redrawJournal to View
+		NotificationManager.getNotifier().updateNotification(taskId);
+		//TODO redrawJournal
 	}
 	
-	public void cancelTask(int taskId)
+	/**
+	 * Изменить статус задачи на "отмененная"
+	 * @param taskId идентификатор задачи
+	 */
+	void cancelTask(int taskId)
 	{
-		Task task = journal.removeTask(taskId, Status.ACTIVE);
-		task.setStatus(Status.CANCELED);
-		journal.addTask(task);
+		journal.cancelTask(taskId);
+		NotificationManager.getNotifier().removeNotification(taskId);
+		//TODO redrawJournal
 	}
 	
-	public Task changeTask(int taskId, String name, String description, LocalDateTime time, NotificationType type)
+	/**
+	 * Изменить параметры задачи
+	 * @param taskId идентификатор задачи
+	 * @param name Название задачи
+	 * @param description Описание задачи
+	 * @param datetime Время и дата задачи
+	 * @param notificationShift время, в которое должно сработать оповещение
+	 * @param type Тип уведомления
+	 */
+	void changeTask(int taskId, String name, String description, 
+			LocalDateTime datetime, TemporalAmount notificationShift,  NotificationType type)
 	{
-		Task task = journal.getTask(taskId, Status.ACTIVE);
+		Task task = journal.getTask(taskId);
 		task.setName(name);
 		task.setDescription(description);
-		task.setTime(time);
+		task.setTime(datetime);
+		task.setNotificationTime(notificationTime);
 		task.setType(type);
-		return task;
+		NotificationManager.getNotifier().updateNotification(task.getId());
+		//TODO redrawJournal
 	}
 }
