@@ -125,7 +125,7 @@ public class Controller
 		task.setName(name);
 		task.setDescription(description);
 		task.setTime(datetime);
-		task.setNotificationTime(notificationTime);
+		task.setNotificationTime(notificationShift);
 		task.setType(type);
 		NotificationManager.getNotifier().updateNotification(task.getId());
 		//TODO redrawJournal
