@@ -1,5 +1,6 @@
 package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 
 public class JournalIpml implements Journal {
@@ -64,14 +65,14 @@ public class JournalIpml implements Journal {
         }
     }
 
-    public LocalDateTime getIntervalTimeTaskInJournal(String id) {
+    public TemporalAmount getIntervalTimeTaskInJournal(String id) {
         for (int i = 0; i < this.listTask.size(); i++) {
             if (this.listTask != null && this.listTask.get(i).getId().equals(id))
                 return this.listTask.get(i).getIntervalTime();
         }
         return null;
     }
-    public void setIntervaTimeTaskInJournal(String id,LocalDateTime intervalTimeTask) {
+    public void setIntervaTimeTaskInJournal(String id,TemporalAmount intervalTimeTask) {
         for (int i = 0; i < this.listTask.size(); i++) {
             if (this.listTask != null && this.listTask.get(i).getId().equals(id)) {
                 this.listTask.get(i).setIntervalTime(intervalTimeTask);

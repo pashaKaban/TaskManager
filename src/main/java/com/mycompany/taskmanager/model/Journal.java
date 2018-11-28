@@ -1,5 +1,7 @@
 package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+
 //поменять на стринг
 public interface Journal {
     void addTask(TaskIpml task);
@@ -9,8 +11,8 @@ public interface Journal {
     void setNameTaskInJournal(String id,String nameTask);
     String getDiscriptionTaskInJournal(String id);
     void setDiscriptionTaskInJournal(String id,String discriptionTask);
-    LocalDateTime getIntervalTimeTaskInJournal(String id);
-    void setIntervaTimeTaskInJournal(String id,LocalDateTime intervalTimeTask);
+    TemporalAmount getIntervalTimeTaskInJournal(String id);
+    void setIntervaTimeTaskInJournal(String id,TemporalAmount intervalTimeTask);
     LocalDateTime getPlanTimeTaskInJournalInJournal(String id);
     void setPlanTimeTaskInJournal(String id,LocalDateTime planTimeTask);
     Status getStatusTaskInJournal(String id);

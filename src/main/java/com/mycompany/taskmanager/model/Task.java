@@ -1,13 +1,15 @@
 package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+
 public interface Task {
     String getId();
     String getNameTask();
     void setNameTask(String nameTask);
     String getDiscription();
     void setDiscription(String discription);
-    LocalDateTime getIntervalTime();
-    void setIntervalTime(LocalDateTime intervalTime);
+    TemporalAmount getIntervalTime();
+    void setIntervalTime(TemporalAmount intervalTime);
     LocalDateTime getPlanTime();
     void setPlanTime(LocalDateTime planTime);
     Status getStatus();

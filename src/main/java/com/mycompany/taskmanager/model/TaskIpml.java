@@ -1,15 +1,17 @@
 package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+
 public class TaskIpml implements Task {
     String id;
     String nameTask;
     String discription;
     LocalDateTime planTime;
-    LocalDateTime intervalTime;
+    TemporalAmount intervalTime;
     Status status;
     NotificationType notificationType;
 
-    public TaskIpml(String nameTask,String discription,LocalDateTime planTime,LocalDateTime intervalTime,Status status,NotificationType notificationType){
+    public TaskIpml(String nameTask,String discription,LocalDateTime planTime,TemporalAmount intervalTime,Status status,NotificationType notificationType){
         this.id= IdGenerator.generateId();
         this.discription=discription;
         this.intervalTime=intervalTime;
@@ -38,11 +40,11 @@ public class TaskIpml implements Task {
         this.discription = discription;
     }
 
-    public LocalDateTime getIntervalTime() {
+    public TemporalAmount getIntervalTime() {
         return intervalTime;
     }
 
-    public void setIntervalTime(LocalDateTime intervalTime) {
+    public void setIntervalTime(TemporalAmount intervalTime) {
         this.intervalTime = intervalTime;
     }
 
