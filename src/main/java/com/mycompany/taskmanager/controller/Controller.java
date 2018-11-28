@@ -8,8 +8,8 @@ import com.mycompany.taskmanager.model.*;
  * @author St1gven
  */
 public class Controller 
-{
-	private Controller(){}
+{	
+	private String journalPath;
 	
 	private static class ControllerHolder
 	{
@@ -25,6 +25,7 @@ public class Controller
 	}
 	
 	private Journal journal;
+	
 	/**
 	 * Устанавливает журнал с которым будет работать контроллер
 	 * @param journal журнал
@@ -32,6 +33,12 @@ public class Controller
 	void setJournal(Journal journal)
 	{
 		this.journal = journal;
+	}
+	
+	private JournalWindow window;
+	void setMainWindow(JournalWindow window)
+	{
+		this.window = window;
 	}
 	
 	/**
@@ -57,7 +64,7 @@ public class Controller
 		Task task = new Task(name, description, datetime, notificationShift, type);
 		journal.addTask(task);
 		NotificationManager.getNotifier().addNotification(task.getId());
-		//TODO redrawJournal
+		window.reloadTable();
 	}
 	
 	/**
@@ -68,7 +75,7 @@ public class Controller
 	{
 		journal.finishTask(taskId);
 		NotificationManager.getNotifier().removeNotification(taskId);
-		//TODO redrawJournal
+		window.reloadTable();
 	}
 	
 	/**
@@ -82,7 +89,7 @@ public class Controller
 		Task task = journal.getTask(taskId);
 		task.setTime(task.getTime().plus(shift));
 		NotificationManager.getNotifier().updateNotification(taskId);
-		//TODO redrawJournal
+		window.reloadTable();
 	}
 	
 	/**
@@ -95,7 +102,7 @@ public class Controller
 		Task task = journal.getTask(taskId);
 		task.setTime(datetime);
 		NotificationManager.getNotifier().updateNotification(taskId);
-		//TODO redrawJournal
+		window.reloadTable();
 	}
 	
 	/**
@@ -106,7 +113,7 @@ public class Controller
 	{
 		journal.cancelTask(taskId);
 		NotificationManager.getNotifier().removeNotification(taskId);
-		//TODO redrawJournal
+		window.reloadTable();
 	}
 	
 	/**
@@ -128,6 +135,22 @@ public class Controller
 		task.setNotificationTime(notificationShift);
 		task.setType(type);
 		NotificationManager.getNotifier().updateNotification(task.getId());
-		//TODO redrawJournal
+		window.reloadTable();
+	}
+	
+	/**
+	 * Отрисовывает главное окно
+	 */
+	void showWindow()
+	{
+		window.showJournal();
+	}
+	
+	/**
+	 * Завершает работу приложения
+	*/
+	void exit()
+	{
+		JournalLoader.store(journal, Main.journalPath);
 	}
 }
