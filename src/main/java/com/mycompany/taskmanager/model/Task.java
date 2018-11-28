@@ -1,4 +1,4 @@
-
+package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 
