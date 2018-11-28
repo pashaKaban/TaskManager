@@ -1,3 +1,4 @@
+package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
 //поменять на стринг
 public interface Journal {
