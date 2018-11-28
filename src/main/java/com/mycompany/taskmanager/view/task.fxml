@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TaskWindow">
+    <children>
+        <HBox prefHeight="15.0" prefWidth="600.0">
+            <children>
+                <Label text="Time">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="100.0" />
+                    </HBox.margin>
+                </Label>
+                <Label text="Date">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="240.0" />
+                    </HBox.margin>
+                </Label>
+            </children></HBox>
+        <HBox prefHeight="53.0" prefWidth="600.0">
+            <children>
+                <ChoiceBox fx:id="hours" prefHeight="200.0" prefWidth="150.0">
+                </ChoiceBox>
+                <ChoiceBox fx:id="min" prefWidth="150.0">
+                    <HBox.margin>
+                        <Insets right="20.0" />
+                    </HBox.margin>
+                </ChoiceBox>
+                <DatePicker />
+            </children>
+        </HBox>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="600.0" text="Title">
+            <font>
+                <Font size="36.0" />
+            </font>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </Label>
+        <TextField fx:id="title" prefHeight="15.0" prefWidth="600.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Label alignment="CENTER" contentDisplay="TOP" prefHeight="12.0" prefWidth="600.0" text="Description">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <TextArea fx:id="description" prefHeight="135.0" prefWidth="600.0">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </TextArea>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="372.0" prefHeight="0.0" prefWidth="600.0">
+         <children>
+            <Label alignment="TOP_LEFT" text="Type">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <ChoiceBox prefWidth="150.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="200.0" />
+               </HBox.margin>
+            </ChoiceBox>
+         </children>
+      </HBox>
+        <HBox prefHeight="0.0" prefWidth="600.0">
+            <children>
+                <Label alignment="TOP_LEFT" text="Notification">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="10.0" />
+                    </HBox.margin>
+                </Label>
+                <CheckBox mnemonicParsing="false" prefHeight="56.0" prefWidth="113.0" text="Notify">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="100.0" />
+                    </HBox.margin>
+                </CheckBox>
+            </children>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="290.0" prefHeight="28.0" prefWidth="600.0">
+            <children>
+                <Label text="Time">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="95.0" />
+                    </HBox.margin>
+                </Label>
+                <Label text="Date">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="240.0" />
+                    </HBox.margin>
+                </Label>
+            </children>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="335.0" prefHeight="21.0" prefWidth="600.0">
+            <children>
+                <ChoiceBox accessibleRole="LIST_VIEW" accessibleText="00:00" prefWidth="150.0">
+                    <HBox.margin>
+                        <Insets left="10.0" />
+                    </HBox.margin>
+                </ChoiceBox>
+                <ChoiceBox prefWidth="150.0">
+                    <HBox.margin>
+                        <Insets right="20.0" />
+                    </HBox.margin>
+                </ChoiceBox>
+                <DatePicker />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <Button fx:id="btnSave" alignment="TOP_CENTER" mnemonicParsing="false" text="Save" onAction="#saveTask">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets right="150.0" />
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="Cancel" onAction="#cancel">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+</VBox>
