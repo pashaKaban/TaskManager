@@ -3,6 +3,7 @@ package com.mycompany.taskmanager.controller;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 import com.mycompany.taskmanager.model.*;
+import com.mycompany.taskmanager.view.*;
 /**
  *
  * @author St1gven
@@ -73,9 +74,9 @@ public class Controller
 	 */
 	void finishTask(int taskId)
 	{
-		journal.finishTask(taskId);
+		journal.getTask(taskId).setStatus(Status.FINISHED);
 		NotificationManager.getNotifier().removeNotification(taskId);
-		window.reloadTable();
+		window.reloadTable(journal);
 	}
 	
 	/**
@@ -89,7 +90,7 @@ public class Controller
 		Task task = journal.getTask(taskId);
 		task.setTime(task.getTime().plus(shift));
 		NotificationManager.getNotifier().updateNotification(taskId);
-		window.reloadTable();
+		window.reloadTable(journal);
 	}
 	
 	/**
@@ -102,7 +103,7 @@ public class Controller
 		Task task = journal.getTask(taskId);
 		task.setTime(datetime);
 		NotificationManager.getNotifier().updateNotification(taskId);
-		window.reloadTable();
+		window.reloadTable(journal);
 	}
 	
 	/**
@@ -111,9 +112,9 @@ public class Controller
 	 */
 	void cancelTask(int taskId)
 	{
-		journal.cancelTask(taskId);
+		journal.getTask(taskId).setStatus(Status.CANCELED);
 		NotificationManager.getNotifier().removeNotification(taskId);
-		window.reloadTable();
+		window.reloadTable(journal);
 	}
 	
 	/**
@@ -135,7 +136,7 @@ public class Controller
 		task.setNotificationTime(notificationShift);
 		task.setType(type);
 		NotificationManager.getNotifier().updateNotification(task.getId());
-		window.reloadTable();
+		window.reloadTable(journal);
 	}
 	
 	/**
@@ -143,7 +144,7 @@ public class Controller
 	 */
 	void showWindow()
 	{
-		window.showJournal();
+		window.showJournal(journal);
 	}
 	
 	/**
