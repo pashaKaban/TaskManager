@@ -8,22 +8,22 @@ import java.time.temporal.TemporalAmount;
  * @author St1gven
  */
 public class WindowNotification implements Notification{
-	private int taskId;
+	private String taskId;
 	private LocalDateTime time;
-	WindowNotification(int taskId, LocalDateTime time, TemporalAmount shift)
+	WindowNotification(String taskId, LocalDateTime time, TemporalAmount shift)
 	{
 		this.taskId = taskId;
 		this.time = time.minus(shift);
 	}
 	
 	@Override
-	public int getTaskId() 
+	public String getTaskId() 
 	{
 		return taskId;
 	}
 
 	@Override
-	public void setTaskId(int taskId) 
+	public void setTaskId(String taskId) 
 	{
 		this.taskId = taskId;
 	}

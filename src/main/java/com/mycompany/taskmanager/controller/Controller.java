@@ -46,7 +46,7 @@ public class Controller
 	 * @param taskId идентификатор задачи
 	 * @return обьект Task с соответствующим идентификатором
 	 */
-	Task getTask(int taskId)
+	Task getTask(String taskId)
 	{
 		return journal.getTask(taskId);
 	}
@@ -62,7 +62,7 @@ public class Controller
 	void createTask(String name, String description, LocalDateTime datetime, 
 			TemporalAmount notificationShift, NotificationType type)
 	{
-		Task task = new Task(name, description, datetime, notificationShift, type);
+		Task task = new TaskIpml(name, description, datetime, notificationShift, Status.ACTIVE, type);
 		journal.addTask(task);
 		NotificationManager.getNotifier().addNotification(task.getId());
 		window.reloadTable();
@@ -72,7 +72,7 @@ public class Controller
 	 * Изменить статус задачи на "завершенная"
 	 * @param taskId идентификатор задачи
 	 */
-	void finishTask(int taskId)
+	void finishTask(String taskId)
 	{
 		journal.getTask(taskId).setStatus(Status.FINISHED);
 		NotificationManager.getNotifier().removeNotification(taskId);
@@ -85,10 +85,10 @@ public class Controller
 	 * @param taskId идентификатор задачи
 	 * @param shift количество времени, на которое перемещается задачу
 	 */
-	void postponeTask(int taskId, TemporalAmount shift)
+	void postponeTask(String taskId, TemporalAmount shift)
 	{
 		Task task = journal.getTask(taskId);
-		task.setTime(task.getTime().plus(shift));
+		task.setPlanTime(task.getPlanTime().plus(shift));
 		NotificationManager.getNotifier().updateNotification(taskId);
 		window.reloadTable(journal);
 	}
@@ -98,10 +98,10 @@ public class Controller
 	 * @param taskId идентификатор задачи
 	 * @param datetime время, на которое перемещается задача
 	 */
-	void postponeTask(int taskId, LocalDateTime datetime)
+	void postponeTask(String taskId, LocalDateTime datetime)
 	{
 		Task task = journal.getTask(taskId);
-		task.setTime(datetime);
+		task.setPlanTime(datetime);
 		NotificationManager.getNotifier().updateNotification(taskId);
 		window.reloadTable(journal);
 	}
@@ -110,7 +110,7 @@ public class Controller
 	 * Изменить статус задачи на "отмененная"
 	 * @param taskId идентификатор задачи
 	 */
-	void cancelTask(int taskId)
+	void cancelTask(String taskId)
 	{
 		journal.getTask(taskId).setStatus(Status.CANCELED);
 		NotificationManager.getNotifier().removeNotification(taskId);
@@ -126,15 +126,15 @@ public class Controller
 	 * @param notificationShift время, в которое должно сработать оповещение
 	 * @param type Тип уведомления
 	 */
-	void changeTask(int taskId, String name, String description, 
+	void changeTask(String taskId, String name, String description, 
 			LocalDateTime datetime, TemporalAmount notificationShift,  NotificationType type)
 	{
 		Task task = journal.getTask(taskId);
-		task.setName(name);
-		task.setDescription(description);
-		task.setTime(datetime);
-		task.setNotificationTime(notificationShift);
-		task.setType(type);
+		task.setNameTask(name);
+		task.setDiscription(description);
+		task.setPlanTime(datetime);
+		task.setIntervalTime(notificationShift);
+		task.setNotificationType(type);
 		NotificationManager.getNotifier().updateNotification(task.getId());
 		window.reloadTable(journal);
 	}

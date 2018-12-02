@@ -11,13 +11,13 @@ public interface Notification {
 	 * Получить идентификатор задачи связанной с данным уведомлением
 	 * @return идентификатор задачи
 	 */
-	int getTaskId();
+	String getTaskId();
 	
 	/**
 	 * Установить задачу для данного уведомления
 	 * @param taskId идентификатор задачи
 	 */
-	void setTaskId(int taskId);
+	void setTaskId(String taskId);
 	
 	/**
 	 * Получить время оповещения данного уведомления

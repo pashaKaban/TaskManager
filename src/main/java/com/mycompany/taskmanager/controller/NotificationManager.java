@@ -45,7 +45,7 @@ public final class NotificationManager
 	 * @param taskId идентификатор задачи
 	 * @param journal журнал из которого загружается задача
 	 */
-	void addNotification(int taskId)
+	void addNotification(String taskId)
 	{
 		Task task = Controller.getController().getTask(taskId);
 		List list = Collections.synchronizedList(notifications);
@@ -58,7 +58,7 @@ public final class NotificationManager
 				if(notification.getTaskId() == task.getId())
 					throw new IllegalArgumentException("This task also added");
 
-				if(notification.getTime().compareTo(task.getTime().minus(task.getNotificationShift())) > 0)
+				if(notification.getTime().compareTo(task.getPlanTime().minus(task.getIntervalTime())) > 0)
 				{
 					it.previous();
 					it.add(buildNotification(task));
@@ -82,7 +82,7 @@ public final class NotificationManager
 	 * Обновить состояние задачи
 	 * @param taskId 
 	 */
-	void updateNotification(int taskId)
+	void updateNotification(String taskId)
 	{
 		Task task = Controller.getController().getTask(taskId);
 		List list = Collections.synchronizedList(notifications);
@@ -93,7 +93,7 @@ public final class NotificationManager
 				Notification notification = it.next();
 				if(notification.getTaskId() == task.getId())
 				{
-					if(notification.getTime().compareTo(task.getTime().minus(task.getNotificationShift())) != 0)
+					if(notification.getTime().compareTo(task.getPlanTime().minus(task.getIntervalTime())) != 0)
 					{
 						it.remove();
 					}
@@ -110,13 +110,13 @@ public final class NotificationManager
 	
 	private Notification buildNotification(Task task)
 	{
-		switch(task.getType())
+		switch(task.getNotificationType())
 		{
 			case WINDOW:
-				return new WindowNotification(task.getId(), task.getTime(), task.getNotificationShift());
+				return new WindowNotification(task.getId(), task.getPlanTime(), task.getIntervalTime());
 			case NONE:
 			default:
-				return new NoneNotification(task.getId(), task.getTime(), task.getNotificationShift());
+				return new NoneNotification(task.getId(), task.getPlanTime(), task.getIntervalTime());
 		}
 	}
 	
@@ -124,7 +124,7 @@ public final class NotificationManager
 	 * Удалить задачу из отслеживания времени оповещения
 	 * @param taskId 
 	 */
-	void removeNotification(int taskId)
+	void removeNotification(String taskId)
 	{
 		List list = Collections.synchronizedList(notifications);
 		synchronized (list)

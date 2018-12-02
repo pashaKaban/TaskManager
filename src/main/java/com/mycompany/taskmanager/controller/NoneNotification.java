@@ -9,23 +9,23 @@ import java.time.temporal.TemporalAmount;
  */
 public class NoneNotification implements Notification{
 	
-	private int taskId;
+	private String taskId;
 	private LocalDateTime time;
 	
-	NoneNotification(int taskId, LocalDateTime time, TemporalAmount shift)
+	NoneNotification(String taskId, LocalDateTime time, TemporalAmount shift)
 	{
 		this.taskId = taskId;
 		this.time = time.minus(shift);
 	}
 	
 	@Override
-	public int getTaskId() 
+	public String getTaskId() 
 	{
 		return taskId;
 	}
 
 	@Override
-	public void setTaskId(int taskId) 
+	public void setTaskId(String taskId) 
 	{
 		this.taskId = taskId;
 	}
