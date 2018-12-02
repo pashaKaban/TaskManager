@@ -2,8 +2,8 @@ package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 
-public class TaskIpml implements Task {
-    String id;
+public class TaskIpml implements Task {// TODO rename
+    String id;//TODO private
     String nameTask;
     String discription;
     LocalDateTime planTime;

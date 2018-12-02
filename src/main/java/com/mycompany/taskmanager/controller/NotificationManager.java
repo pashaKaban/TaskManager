@@ -3,14 +3,17 @@ package com.mycompany.taskmanager.controller;
 import com.mycompany.taskmanager.model.Journal;
 import com.mycompany.taskmanager.model.Status;
 import com.mycompany.taskmanager.model.Task;
+import com.sun.javafx.css.Combinator;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 
 /**
  *
@@ -64,6 +67,15 @@ public final class NotificationManager
 			}
 			list.add(buildNotification(task));
 		}
+		
+		/*Set<Notification> set = Collections.synchronizedSortedSet(new TreeSet<T>(new Combinator));
+		
+		Notification not = buildNotification(task)
+		if (set.contains(not))
+		{
+			
+		}
+		set.add(not);*/
 	}
 	
 	/**

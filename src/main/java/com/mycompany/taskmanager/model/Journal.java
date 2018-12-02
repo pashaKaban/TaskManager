@@ -4,10 +4,12 @@ import java.time.temporal.TemporalAmount;
 
 //поменять на стринг
 public interface Journal {
-    void addTask(TaskIpml task);
-    TaskIpml getTask(String id);
+	//TODO id
+    void addTask(Task task);
+    Task getTask(String id);
     void deleteTask(String id);
-    String getNameTaskInJournal(String id);
+	
+    String getNameTaskInJournal(String id);//TODO delete set get
     void setNameTaskInJournal(String id,String nameTask);
     String getDiscriptionTaskInJournal(String id);
     void setDiscriptionTaskInJournal(String id,String discriptionTask);

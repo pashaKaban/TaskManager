@@ -2,12 +2,15 @@ package com.mycompany.taskmanager.model;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class JournalIpml implements Journal {
-    ArrayList<TaskIpml> listTask;
+    List<TaskIpml> listTask;
+	Map<String, Task> tasks;//todo
 
     public JournalIpml() {
-        ArrayList<TaskIpml> listTask = new ArrayList<TaskIpml>();
+        List<TaskIpml> listTask = new ArrayList<TaskIpml>();
     }
 
     public void addTask(TaskIpml task) {
@@ -15,6 +18,7 @@ public class JournalIpml implements Journal {
     }
 
     public TaskIpml getTask(String id) {
+		return tasks.get(id);
         for (int i = 0; i < this.listTask.size(); i++) {
             if (this.listTask != null && this.listTask.get(i).getId().equals(id)) {
                 return this.listTask.get(i);

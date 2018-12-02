@@ -6,7 +6,7 @@ public interface Task {
     String getId();
     String getNameTask();
     void setNameTask(String nameTask);
-    String getDiscription();
+    String getDiscription();//TODO rename
     void setDiscription(String discription);
     TemporalAmount getIntervalTime();
     void setIntervalTime(TemporalAmount intervalTime);

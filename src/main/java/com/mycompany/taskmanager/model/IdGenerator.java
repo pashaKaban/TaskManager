@@ -11,12 +11,12 @@ public class IdGenerator {
     private IdGenerator()
     {
         this.identificator="";
-        SimpleDateFormat formatForDateNow=new SimpleDateFormat("F D W dd MM yyyy HH mm ss SS");
+        SimpleDateFormat formatForDateNow=new SimpleDateFormat("FDWddMMyyyyHHmmssSS");
         String partOneId=(String) formatForDateNow.format(new Date());
-        partOneId=partOneId.replaceAll("\\s+","");
+        //partOneId=partOneId.replaceAll("\\s+","");
         //andNot(x) — операция побитовой дизъюнкции с дополнением this & (~x);
         BigInteger bigInteger=new BigInteger(128,10,new Random()).andNot(new BigInteger(128,10,new Random()));
-        String partTwoId=new String(bigInteger.toString());
+        String partTwoId=bigInteger.toString();
         this.identificator=this.identificator.concat(partOneId).concat(partTwoId);
     }
     public static String generateId(){
@@ -25,6 +25,19 @@ public class IdGenerator {
         }
         return id.identificator;
     }
+	
+	
+	private static final IdGenerator instance = new IdGenerator();
+	
+	private IdGenerator()
+	{
+		
+	}
+	
+	public static IdGenerator getInstance()
+	{
+		return instance;
+	}
 }
 
 
